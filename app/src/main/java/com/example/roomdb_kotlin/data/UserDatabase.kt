@@ -19,7 +19,7 @@ abstract class UserDatabase : RoomDatabase() {
 
         fun getDatabase(context: Context): UserDatabase {
             val tempInstance = INSTANCE
-            if(tempInstance!=null) {
+            if(tempInstance != null) {
                 return tempInstance
             }
 
