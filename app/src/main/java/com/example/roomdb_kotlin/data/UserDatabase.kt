@@ -1,10 +1,10 @@
 package com.example.roomdb_kotlin.data
 
 import android.content.Context
-import android.service.autofill.UserData
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
+import com.example.roomdb_kotlin.model.User
 
 // Contains the database holder and serves as the main access point
 // for the underlying connection to your app's persisted, relational data.

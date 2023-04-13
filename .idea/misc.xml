@@ -4,8 +4,10 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/dev/RoomDBKotlin/app/src/main/res/layout/activity_main.xml" value="0.209375" />
+        <entry key="..\:/dev/RoomDBKotlin/app/src/main/res/layout/data_card.xml" value="1.0" />
         <entry key="..\:/dev/RoomDBKotlin/app/src/main/res/layout/fragment_add.xml" value="0.209375" />
         <entry key="..\:/dev/RoomDBKotlin/app/src/main/res/layout/fragment_list.xml" value="0.209375" />
+        <entry key="..\:/dev/RoomDBKotlin/app/src/main/res/layout/fragment_update.xml" value="0.209375" />
       </map>
     </option>
   </component>

@@ -1,4 +1,4 @@
-package com.example.roomdb_kotlin.fragments.add
+package com.example.roomdb_kotlin.fragments.update
 
 import android.os.Bundle
 import android.text.Editable
@@ -10,42 +10,49 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
+import androidx.navigation.fragment.navArgs
 import com.example.roomdb_kotlin.R
+import com.example.roomdb_kotlin.databinding.FragmentUpdateBinding
 import com.example.roomdb_kotlin.model.User
 import com.example.roomdb_kotlin.viewmodel.UserViewModel
-import com.example.roomdb_kotlin.databinding.FragmentAddBinding
+import kotlinx.coroutines.NonDisposableHandle.parent
 
-class AddFragment : Fragment() {
+class UpdateFragment : Fragment() {
 
-    private lateinit var binding: FragmentAddBinding
+    private val args by navArgs<UpdateFragmentArgs>()
+    private lateinit var binding: FragmentUpdateBinding
     private lateinit var userViewModel: UserViewModel
-
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?,
     ): View {
         // Inflate the layout for this fragment
+        binding = FragmentUpdateBinding.inflate(inflater, container, false)
         userViewModel = ViewModelProvider(this)[UserViewModel::class.java]
 
-        binding = FragmentAddBinding.inflate(inflater, container, false)
-        binding.addButton.setOnClickListener {
-            insertDataToDatabase()
-        }
+        binding.firstNameEt.setText(args.currentUser.firstName)
+        binding.lastNameEt.setText(args.currentUser.lastName)
+        binding.AgeEt.setText(args.currentUser.age.toString())
+
+        binding.updateButton.setOnClickListener { updateData() }
+
         return binding.root
     }
 
-    private fun insertDataToDatabase() {
+    private fun updateData() {
         val firstName = binding.firstNameEt.text.toString()
         val lastName = binding.lastNameEt.text.toString()
         val age = binding.AgeEt.text
 
-        if(inputCheck(firstName, lastName,age)) {
+        if(inputCheck(firstName, lastName, age)) {
             // create user object
-            val user = User(0,firstName,lastName,Integer.parseInt(age.toString()))
-            // add data to database
-            userViewModel.addUser(user)
-            Toast.makeText(requireContext(),"Successfully Added Data", Toast.LENGTH_SHORT).show()
-            findNavController().navigate(R.id.action_addFragment2_to_listFragment2)
+            val updatedUser = User(args.currentUser.id,firstName,lastName,Integer.parseInt(age.toString()))
+
+            // update data of database
+            userViewModel.updateUser(updatedUser)
+
+            Toast.makeText(requireContext(),"Successfully Updated Data", Toast.LENGTH_SHORT).show()
+            findNavController().navigate(R.id.action_updateFragment_to_listFragment2)
         } else {
             Toast.makeText(requireContext(),"Empty fields are not allowed", Toast.LENGTH_SHORT).show()
         }
@@ -54,4 +61,5 @@ class AddFragment : Fragment() {
     private fun inputCheck(firstName: String, lastName: String, age: Editable): Boolean {
         return !(TextUtils.isEmpty(firstName) && TextUtils.isEmpty(lastName) && age.isEmpty())
     }
+
 }

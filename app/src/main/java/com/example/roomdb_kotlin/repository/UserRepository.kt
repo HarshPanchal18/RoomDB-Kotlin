@@ -1,6 +1,8 @@
-package com.example.roomdb_kotlin.data
+package com.example.roomdb_kotlin.repository
 
 import androidx.lifecycle.LiveData
+import com.example.roomdb_kotlin.data.UserDao
+import com.example.roomdb_kotlin.model.User
 
 // abstracts access to multiple data sources.
 class UserRepository(private val userDao: UserDao) {
@@ -9,5 +11,9 @@ class UserRepository(private val userDao: UserDao) {
 
     suspend fun addUser(user: User) {
         userDao.AddUser(user)
+    }
+
+    suspend fun updateUser(user: User) {
+        userDao.updateUsr(user)
     }
 }

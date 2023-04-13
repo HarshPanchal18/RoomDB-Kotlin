@@ -13,6 +13,9 @@
         <action
             android:id="@+id/action_listFragment2_to_addFragment2"
             app:destination="@id/addFragment2" />
+        <action
+            android:id="@+id/action_listFragment2_to_updateFragment2"
+            app:destination="@id/updateFragment2" />
     </fragment>
 
     <fragment
@@ -23,6 +26,19 @@
         <action
             android:id="@+id/action_addFragment2_to_listFragment2"
             app:destination="@id/listFragment2" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/updateFragment2"
+        android:name="com.example.roomdb_kotlin.fragments.update.UpdateFragment"
+        android:label="Update"
+        tools:layout="@layout/fragment_update" >
+        <action
+            android:id="@+id/action_updateFragment_to_listFragment2"
+            app:destination="@id/listFragment2" />
+        <argument
+            android:name="currentUser"
+            app:argType="com.example.roomdb_kotlin.model.User" />
     </fragment>
 
 </navigation>
