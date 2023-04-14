@@ -15,4 +15,10 @@ interface UserDao { // contains the methods used for accessing database
 
     @Update
     suspend fun updateUsr(user: User)
+
+    @Delete
+    suspend fun deleteUser(user: User)
+
+    @Query("DELETE FROM user_table")
+    suspend fun deleteAll()
 }

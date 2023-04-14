@@ -1,10 +1,10 @@
 package com.example.roomdb_kotlin.fragments.list
 
 import android.os.Bundle
+import android.view.*
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -37,7 +37,37 @@ class ListFragment : Fragment() {
             adapter.setData(user)
         }
 
+        setHasOptionsMenu(true)
+
         return binding.root
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.delete_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if(item.itemId == R.id.menuDelete) {
+            deleteAllUser()
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun deleteAllUser() {
+        val builder = AlertDialog.Builder(requireContext())
+            .setPositiveButton("Yes") {_,_ ->
+                userViewModel.deleteAllUser()
+                Toast.makeText(
+                    requireContext(),
+                    "Successfully wiped: ",
+                    Toast.LENGTH_SHORT
+                ).show()
+                findNavController().navigate(R.id.action_updateFragment2_to_listFragment2)
+            }
+            .setNegativeButton("No") {_,_ ->}
+            .setTitle("Delete Everything?")
+            .setMessage("Are you sure you want to delete everything?")
+            .create().show()
     }
 
 }

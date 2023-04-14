@@ -3,11 +3,10 @@ package com.example.roomdb_kotlin.fragments.update
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextUtils
+import android.view.*
 import androidx.fragment.app.Fragment
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
@@ -36,6 +35,8 @@ class UpdateFragment : Fragment() {
 
         binding.updateButton.setOnClickListener { updateData() }
 
+        setHasOptionsMenu(true)
+
         return binding.root
     }
 
@@ -52,7 +53,7 @@ class UpdateFragment : Fragment() {
             userViewModel.updateUser(updatedUser)
 
             Toast.makeText(requireContext(),"Successfully Updated Data", Toast.LENGTH_SHORT).show()
-            findNavController().navigate(R.id.action_updateFragment_to_listFragment2)
+            findNavController().navigate(R.id.action_updateFragment2_to_listFragment2)
         } else {
             Toast.makeText(requireContext(),"Empty fields are not allowed", Toast.LENGTH_SHORT).show()
         }
@@ -62,4 +63,31 @@ class UpdateFragment : Fragment() {
         return !(TextUtils.isEmpty(firstName) && TextUtils.isEmpty(lastName) && age.isEmpty())
     }
 
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.delete_menu, menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        if(item.itemId == R.id.menuDelete) {
+            deleteUser()
+        }
+        return super.onOptionsItemSelected(item)
+    }
+
+    private fun deleteUser() {
+        val builder = AlertDialog.Builder(requireContext())
+            .setPositiveButton("Yes") {_,_ ->
+                userViewModel.deleteUser(args.currentUser)
+                Toast.makeText(
+                    requireContext(),
+                    "Successfully removed: ${args.currentUser.firstName + " " +args.currentUser.lastName}",
+                    Toast.LENGTH_SHORT
+                ).show()
+                findNavController().navigate(R.id.action_updateFragment2_to_listFragment2)
+            }
+            .setNegativeButton("No") {_,_ ->}
+            .setTitle("Delete ${args.currentUser.firstName}?")
+            .setMessage("Are you sure you want to delete ${args.currentUser.firstName + " " +args.currentUser.lastName}?")
+            .create().show()
+    }
 }
