@@ -3,6 +3,7 @@ package com.example.roomdb_kotlin.data
 import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.example.roomdb_kotlin.model.User
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface UserDao { // contains the methods used for accessing database
@@ -21,4 +22,7 @@ interface UserDao { // contains the methods used for accessing database
 
     @Query("DELETE FROM user_table")
     suspend fun deleteAll()
+
+    @Query("SELECT * FROM user_table WHERE firstName LIKE :searchQuery OR lastName LIKE :searchQuery")
+    suspend fun searchDatabase(searchQuery: String): Flow<List<User>>
 }
