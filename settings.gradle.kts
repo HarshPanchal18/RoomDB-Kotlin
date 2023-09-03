@@ -13,4 +13,4 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "RoomDB-Kotlin"
-include ':app'
+include(":app")
