@@ -4,6 +4,10 @@ buildscript {
         google()
         mavenCentral()
     }
+
+    dependencies {
+        classpath(libs.bundles.plugins)
+    }
 }
 plugins {
     id("com.android.application") version "8.0.2" apply false

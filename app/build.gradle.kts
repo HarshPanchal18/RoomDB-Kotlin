@@ -1,16 +1,18 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("kotlin-kapt")
+    id("com.google.dagger.hilt.android")
 }
 
 android {
     namespace = "com.example.roomdb_kotlin"
-    compileSdk = 32
+    compileSdk = 33
 
     defaultConfig {
         applicationId = "com.example.roomdb_kotlin"
         minSdk = 28
-        targetSdk = 32
+        targetSdk = 33
         versionCode = 1
         versionName = "1.0"
 
@@ -34,40 +36,38 @@ android {
         jvmTarget = "1.8"
     }
     packagingOptions {
-        excludes += "META-INF/*"
+        resources {
+            excludes += "META-INF/*"
+        }
     }
 }
 
 dependencies {
 
-    //def room_version = "2.4.3"
-    implementation("androidx.core:core-ktx:1.7.0")
-    implementation("androidx.appcompat:appcompat:1.5.1")
-    implementation("com.google.android.material:material:1.8.0")
-    implementation("androidx.constraintlayout:constraintlayout:2.1.4")
-    testImplementation("junit:junit:4.13.2")
-    androidTestImplementation("androidx.test.ext:junit:1.1.5")
-    androidTestImplementation("androidx.test.espresso:espresso-core:3.5.1")
+    implementation(libs.core.ktx)
+    implementation(libs.appcompat)
+    implementation(libs.material)
 
-    /*// Navigation Component
-    implementation "androidx.navigation:navigation-fragment-ktx:2.5.3"
-    implementation "androidx.navigation:navigation-runtime-ktx:2.5.3"
-    implementation "androidx.navigation:navigation-ui-ktx:2.5.3"
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.ext.junit)
+    androidTestImplementation(libs.espresso.core)
+    androidTestImplementation(platform("androidx.compose:compose-bom:2023.03.00"))
+    androidTestImplementation("androidx.compose.ui:ui-test-junit4")
+    debugImplementation("androidx.compose.ui:ui-tooling")
+    debugImplementation("androidx.compose.ui:ui-test-manifest")
+
+    implementation(libs.bundles.compose.materials)
+    implementation(libs.bundles.composes)
+    implementation(platform("androidx.compose:compose-bom:2023.03.00"))
 
     // Room components
-    implementation "androidx.room:room-runtime:$room_version"
-    kapt "androidx.room:room-compiler:$room_version"
-    implementation "androidx.room:room-ktx:$room_version"
-    androidTestImplementation "androidx.room:room-testing:$room_version"
+    implementation(libs.bundles.room)
+    kapt(libs.room.compiler)
 
     // Lifecycle components
-    implementation "androidx.lifecycle:lifecycle-extensions:2.2.0"
-    implementation "androidx.lifecycle:lifecycle-common-java8:2.2.0"
-    implementation "androidx.lifecycle:lifecycle-viewmodel:2.4.0"
-    implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.4.0"
+    implementation(libs.lifecycle.runtime)
 
-    // Kotlin components
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:1.3.72"
-    api "org.jetbrains.kotlinx:kotlinx-coroutines-core:1.3.5"
-    api "org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.5"*/
+    // Dagger-hilt components
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.android.compiler)
 }

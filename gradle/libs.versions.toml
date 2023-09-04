@@ -1,0 +1,65 @@
+[versions]
+activityCompose = "1.7.2"
+androidx-junit = "1.1.5"
+appcompat = "1.6.1"
+build-gradle = "8.1.1"
+core-ktx = "1.9.0"
+espresso-core = "3.5.1"
+hilt-android-gradle-plugin = "2.43.2"
+hiltVersion = "2.43.1"
+junit = "4.13.2"
+kotlin-gradle-plugin = "1.5.21"
+lifecycle-runtime = "2.3.1"
+material = "1.9.0"
+room-runtime = "2.5.2"
+
+[libraries]
+androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }
+compose-ui = { module = "androidx.compose.ui:ui" }
+compose-ui-graphics = { module = "androidx.compose.ui:ui-graphics" }
+compose-ui-preview = { module = "androidx.compose.ui:ui-tooling-preview" }
+
+build-gradle = { module = "com.android.tools.build:gradle", version.ref = "build-gradle" }
+kotlin-gradle-plugin = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin-gradle-plugin" }
+
+appcompat = { module = "androidx.appcompat:appcompat", version.ref = "appcompat" }
+core-ktx = { module = "androidx.core:core-ktx", version.ref = "core-ktx" }
+
+espresso-core = { module = "androidx.test.espresso:espresso-core", version.ref = "espresso-core" }
+ext-junit = { module = "androidx.test.ext:junit", version.ref = "androidx-junit" }
+junit = { module = "junit:junit", version.ref = "junit" }
+
+hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hiltVersion" }
+hilt-android-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hiltVersion" }
+hilt-android-gradle-plugin = { module = "com.google.dagger:hilt-android-gradle-plugin", version.ref = "hilt-android-gradle-plugin" }
+
+lifecycle-runtime = { module = "androidx.lifecycle:lifecycle-runtime", version.ref = "lifecycle-runtime" }
+
+material = { module = "com.google.android.material:material", version.ref = "material" }
+androidx-material = { module = "androidx.compose.material:material" }
+androidx-material3 = { module = "androidx.compose.material3:material3" }
+androidx-material-icon-extended = { module = "androidx.compose.material:material-icons-extended" }
+
+room-compiler = { module = "androidx.room:room-compiler", version.ref = "room-runtime" }
+room-ktx = { module = "androidx.room:room-ktx", version.ref = "room-runtime" }
+room-runtime = { module = "androidx.room:room-runtime", version.ref = "room-runtime" }
+
+
+[bundles]
+plugins = [
+    "build-gradle", "hilt-android-gradle-plugin", "kotlin-gradle-plugin"
+]
+
+room = [
+    "room-runtime", "room-compiler", "room-ktx"
+]
+
+compose-materials = [
+    "androidx-material", "androidx-material3", "androidx-material-icon-extended"
+]
+
+composes = [
+    "androidx-activity-compose", "compose-ui", "compose-ui-graphics", "compose-ui-preview"
+]
+
+[plugins]
