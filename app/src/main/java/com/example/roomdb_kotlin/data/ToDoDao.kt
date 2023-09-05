@@ -18,6 +18,9 @@ interface ToDoDao {
     @Query("SELECT * FROM todo_table WHERE id=:taskId")
     fun getSelectedTask(taskId: Int): Flow<ToDoTask>
 
+    @Query("DELETE FROM todo_table")
+    suspend fun deleteAllTasks()
+
     @Insert(onConflict = OnConflictStrategy.NONE) // Insert parameter into database
     suspend fun addTask(toDoTask: ToDoTask)
 
