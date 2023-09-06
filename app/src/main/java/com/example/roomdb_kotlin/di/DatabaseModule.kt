@@ -26,5 +26,5 @@ object DatabaseModule {
 
     @Singleton
     @Provides // To return feature of each module method.
-    fun provideDao(database: ToDoDatabase) = database.toDoDoa()
+    fun provideDao(database: ToDoDatabase) = database.toDoDao()
 }

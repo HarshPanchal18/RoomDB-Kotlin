@@ -6,7 +6,7 @@ import dagger.hilt.android.scopes.ViewModelScoped
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
-@ViewModelScoped
+@ViewModelScoped // For sharing the same instance of a dependency across all ViewModels
 class ToDoRepository @Inject constructor(private val todoDao: ToDoDao) {
 
     val getAllTasks: Flow<List<ToDoTask>> = todoDao.getAllTasks()
