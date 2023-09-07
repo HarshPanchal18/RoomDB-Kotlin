@@ -50,6 +50,6 @@ annotation class EmptyContentPreview
 
 @EmptyContentPreview
 @Composable
-fun prev() {
+fun Prev() {
     EmptyContent()
 }
