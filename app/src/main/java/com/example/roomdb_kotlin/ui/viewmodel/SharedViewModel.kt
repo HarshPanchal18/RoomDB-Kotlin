@@ -85,7 +85,7 @@ class SharedViewModel @Inject constructor(private val repository: ToDoRepository
     }
 
     private val _searchedTask = MutableStateFlow<RequestState<List<ToDoTask>>>(RequestState.Idle)
-    val searchedTask = _searchedTask.value
+    val searchedTask = _searchedTask
 
     fun searchDatabase(searchQuery: String) {
         _searchedTask.value = RequestState.Loading

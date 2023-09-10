@@ -41,6 +41,7 @@ import com.example.roomdb_kotlin.data.models.Priority
 import com.example.roomdb_kotlin.ui.theme.topAppBarBackgroundColor
 import com.example.roomdb_kotlin.ui.theme.topAppBarContentColor
 import com.example.roomdb_kotlin.ui.viewmodel.SharedViewModel
+import com.example.roomdb_kotlin.util.Action
 import com.example.roomdb_kotlin.util.SearchAppBarState
 import com.example.roomdb_kotlin.util.TrailingIconState
 
@@ -58,7 +59,9 @@ fun ListAppBar(
                     sharedViewModel.searchAppBarState.value = SearchAppBarState.OPENED
                 },
                 onSortClicked = {},
-                onDeleteClicked = {}
+                onDeleteAllConfirmed = {
+                    sharedViewModel.action.value = Action.DELETE_ALL
+                }
             )
         }
 
@@ -69,8 +72,7 @@ fun ListAppBar(
                     sharedViewModel.searchTextState.value = newText
                 },
                 onCloseClicked = {
-                    sharedViewModel.searchAppBarState.value =
-                        SearchAppBarState.OPENED
+                    sharedViewModel.searchAppBarState.value = SearchAppBarState.OPENED
                     sharedViewModel.searchTextState.value = ""
                 },
                 onSearchClicked = {}
@@ -84,7 +86,7 @@ fun ListAppBar(
 fun DefaultListAppBar(
     onSearchClicked: () -> Unit,
     onSortClicked: (Priority) -> Unit,
-    onDeleteClicked: () -> Unit
+    onDeleteAllConfirmed: () -> Unit
 ) {
     TopAppBar(
         title = {
@@ -97,7 +99,7 @@ fun DefaultListAppBar(
             ListAppBarActions(
                 onSearchClicked = onSearchClicked,
                 onSortClicked = onSortClicked,
-                onDeleteClicked = onDeleteClicked
+                onDeleteAllConfirmed = onDeleteAllConfirmed
             )
         },
         modifier = Modifier.background(MaterialTheme.colors.topAppBarBackgroundColor)
@@ -108,11 +110,11 @@ fun DefaultListAppBar(
 fun ListAppBarActions(
     onSearchClicked: () -> Unit,
     onSortClicked: (Priority) -> Unit,
-    onDeleteClicked: () -> Unit
+    onDeleteAllConfirmed: () -> Unit
 ) {
     SearchAction(onSearchClicked = onSearchClicked)
     SortAction(onSortClicked = onSortClicked)
-    DeleteAllAction(onDeleteClicked = onDeleteClicked)
+    DeleteAllAction(onDeleteAllConfirmed = onDeleteAllConfirmed)
 }
 
 @Composable
@@ -164,7 +166,7 @@ fun SortAction(onSortClicked: (Priority) -> Unit) {
 }
 
 @Composable
-fun DeleteAllAction(onDeleteClicked: () -> Unit) {
+fun DeleteAllAction(onDeleteAllConfirmed: () -> Unit) {
     var expanded by remember { mutableStateOf(false) }
 
     IconButton(onClick = { expanded = true }) {
@@ -175,7 +177,7 @@ fun DeleteAllAction(onDeleteClicked: () -> Unit) {
         DropdownMenu(expanded = expanded, onDismissRequest = { expanded = false }) {
             DropdownMenuItem(onClick = {
                 expanded = false
-                onDeleteClicked()
+                onDeleteAllConfirmed()
             }) {
                 Text(
                     text = stringResource(id = R.string.delete_all_action),
