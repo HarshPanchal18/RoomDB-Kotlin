@@ -13,10 +13,14 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.text.style.TextOverflow
 import com.example.roomdb_kotlin.R
+import com.example.roomdb_kotlin.components.DisplayAlertDialog
 import com.example.roomdb_kotlin.data.models.ToDoTask
 import com.example.roomdb_kotlin.ui.theme.topAppBarBackgroundColor
 import com.example.roomdb_kotlin.ui.theme.topAppBarContentColor
@@ -74,25 +78,25 @@ fun AddAction(onAddClicked: (Action) -> Unit) {
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun ExistingTaskAppBar(selectedTask: ToDoTask, navigateToListScreen: (Action) -> Unit) {
-    TopAppBar(
-        title = {
-            Text(
-                text = selectedTask.title,
-                color = MaterialTheme.colors.topAppBarContentColor,
-                maxLines = 1,
-                overflow = TextOverflow.Ellipsis
-            )
-        },
-        modifier = Modifier.background(color = MaterialTheme.colors.topAppBarBackgroundColor),
-        actions = {
-            DeleteAction(onDeleteClicked = navigateToListScreen)
-            UpdateAction(onUpdateClicked = navigateToListScreen)
-        },
-        navigationIcon = { CloseAction(onCloseClicked = navigateToListScreen)}
-    )
+    var openDialog by remember { mutableStateOf(false) }
+
+    DisplayAlertDialog(
+        title = stringResource(
+            id = R.string.delete_task,
+            selectedTask.title
+        ),
+        message = stringResource(
+            id = R.string.delete_task_confirmation,
+            selectedTask.title
+        ),
+        openDialog = openDialog,
+        closeDialog = { openDialog = false },
+        onYesClicked = { navigateToListScreen(Action.DELETE) })
+
+    DeleteAction(onDeleteClicked = navigateToListScreen)
+    UpdateAction(onUpdateClicked = navigateToListScreen)
 }
 
 @Composable

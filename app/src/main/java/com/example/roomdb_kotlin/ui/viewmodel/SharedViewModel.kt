@@ -7,8 +7,10 @@ import androidx.lifecycle.viewModelScope
 import com.example.roomdb_kotlin.data.models.Priority
 import com.example.roomdb_kotlin.data.models.ToDoTask
 import com.example.roomdb_kotlin.data.repositories.ToDoRepository
+import com.example.roomdb_kotlin.util.Action
 import com.example.roomdb_kotlin.util.RequestState
 import com.example.roomdb_kotlin.util.SearchAppBarState
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
@@ -49,7 +51,88 @@ class SharedViewModel @Inject constructor(private val repository: ToDoRepository
         }
     }
 
-    fun updateTask(selectedTask: ToDoTask?) {
+    fun addTask() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val todoTask = ToDoTask(
+                title = title.value,
+                description = description.value,
+                priority = priority.value
+            )
+            repository.addTask(toDoTask = todoTask)
+        }
+        searchAppBarState.value = SearchAppBarState.CLOSED
+    }
+
+    fun updateTask() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val todoTask = ToDoTask(
+                id = id.value,
+                title = title.value,
+                description = description.value,
+                priority = priority.value
+            )
+            repository.updateTask(toDoTask = todoTask)
+        }
+    }
+
+    fun updateTitle(newTitle: String) {
+        if (newTitle.length < 20)
+            title.value = newTitle
+    }
+
+    fun validateFields(): Boolean {
+        return title.value.isNotEmpty() && description.value.isNotEmpty()
+    }
+
+    private val _searchedTask = MutableStateFlow<RequestState<List<ToDoTask>>>(RequestState.Idle)
+    val searchedTask = _searchedTask.value
+
+    fun searchDatabase(searchQuery: String) {
+        _searchedTask.value = RequestState.Loading
+        try {
+            viewModelScope.launch {
+                repository.searchDatabase(searchQuery = "%${searchQuery}%")
+                    .collect { searchedTasks ->
+                        _searchedTask.value = RequestState.Success(searchedTasks)
+                    }
+            }
+        } catch (e: Exception) {
+            _searchedTask.value = RequestState.Failure(e)
+        }
+        searchAppBarState.value = SearchAppBarState.TRIGGERED
+    }
+
+    fun deleteTask() {
+        viewModelScope.launch(Dispatchers.IO) {
+            val toDoTask = ToDoTask(
+                id = id.value,
+                title = title.value,
+                description = description.value,
+                priority = priority.value
+            )
+            repository.deleteTask(toDoTask = toDoTask)
+        }
+    }
+
+    fun deleteAllTasks() {
+        viewModelScope.launch(Dispatchers.IO) { repository.deleteAllTasks() }
+    }
+
+    val action: MutableState<Action> = mutableStateOf(Action.NOT_ACTION)
+    fun handleDatabaseActions(action: Action) {
+        when (action) {
+            Action.ADD -> addTask()
+            Action.UPDATE -> updateTask()
+            Action.DELETE -> deleteTask()
+            Action.DELETE_ALL -> deleteAllTasks()
+            Action.UNDO -> addTask()
+            else -> {}
+        }
+
+        this.action.value = Action.NOT_ACTION
+    }
+
+    fun updateTaskFields(selectedTask: ToDoTask?) {
         if (selectedTask != null) {
             id.value = selectedTask.id
             title.value = selectedTask.title
