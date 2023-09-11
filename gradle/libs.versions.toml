@@ -4,6 +4,7 @@ androidx-junit = "1.1.5"
 appcompat = "1.6.1"
 build-gradle = "8.1.1"
 core-ktx = "1.9.0"
+datastorePreferences = "1.0.0"
 espresso-core = "3.5.1"
 hilt-android-gradle-plugin = "2.43.2"
 hiltVersion = "2.43.1"
@@ -16,6 +17,7 @@ room-runtime = "2.5.2"
 
 [libraries]
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "activityCompose" }
+androidx-datastore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "datastorePreferences" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
 
 compose-ui = { module = "androidx.compose.ui:ui" }

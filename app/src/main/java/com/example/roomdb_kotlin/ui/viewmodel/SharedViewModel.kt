@@ -6,17 +6,23 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.roomdb_kotlin.data.models.Priority
 import com.example.roomdb_kotlin.data.models.ToDoTask
+import com.example.roomdb_kotlin.data.repositories.DataStoreRepository
 import com.example.roomdb_kotlin.data.repositories.ToDoRepository
 import com.example.roomdb_kotlin.util.Action
 import com.example.roomdb_kotlin.util.RequestState
 import com.example.roomdb_kotlin.util.SearchAppBarState
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class SharedViewModel @Inject constructor(private val repository: ToDoRepository) : ViewModel() {
+class SharedViewModel @Inject constructor(
+    private val repository: ToDoRepository,
+    private val dataStoreRepository: DataStoreRepository
+) : ViewModel() {
 
     val id: MutableState<Int> = mutableStateOf(0)
     val title: MutableState<String> = mutableStateOf("")
@@ -143,6 +149,35 @@ class SharedViewModel @Inject constructor(private val repository: ToDoRepository
             title.value = ""
             description.value = ""
             priority.value = Priority.LOW
+        }
+    }
+
+    val lowPriorityTask: StateFlow<List<ToDoTask>> =
+    // Converting a cold Flow into a hot StateFlow that is started in the given `scope`,
+        // sharing the most recently emitted value from a single running instance of the upstream flow with multiple downstream subscribers.
+        repository.sortByLowPriority.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(), // Sharing is started when the first subscriber appears, immediately stops when the last subscriber disappears
+            initialValue = emptyList()
+        )
+
+    val highPriorityTask: StateFlow<List<ToDoTask>> =
+        repository.sortByLowPriority.stateIn(
+            scope = viewModelScope,
+            started = SharingStarted.WhileSubscribed(),
+            initialValue = emptyList()
+        )
+
+    private val _sortState = MutableStateFlow<RequestState<Priority>>(RequestState.Idle)
+    val sortState: StateFlow<RequestState<Priority>> = _sortState
+
+    fun readSortState() {
+        _sortState.value = RequestState.Loading
+        try {
+            viewModelScope.launch {
+            }
+        } catch (e: Exception) {
+            _sortState.value = RequestState.Failure(e)
         }
     }
 }

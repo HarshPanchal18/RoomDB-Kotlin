@@ -36,6 +36,7 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import com.example.roomdb_kotlin.R
+import com.example.roomdb_kotlin.components.DisplayAlertDialog
 import com.example.roomdb_kotlin.components.PriorityItem
 import com.example.roomdb_kotlin.data.models.Priority
 import com.example.roomdb_kotlin.ui.theme.topAppBarBackgroundColor
@@ -58,10 +59,8 @@ fun ListAppBar(
                 onSearchClicked = {
                     sharedViewModel.searchAppBarState.value = SearchAppBarState.OPENED
                 },
-                onSortClicked = {},
-                onDeleteAllConfirmed = {
-                    sharedViewModel.action.value = Action.DELETE_ALL
-                }
+                onSortClicked = { sharedViewModel.persistSortState(it) },
+                onDeleteAllConfirmed = { sharedViewModel.action.value = Action.DELETE_ALL }
             )
         }
 
@@ -75,7 +74,9 @@ fun ListAppBar(
                     sharedViewModel.searchAppBarState.value = SearchAppBarState.OPENED
                     sharedViewModel.searchTextState.value = ""
                 },
-                onSearchClicked = {}
+                onSearchClicked = {
+                    sharedViewModel.searchDatabase(searchQuery = it)
+                }
             )
         }
     }
@@ -112,9 +113,19 @@ fun ListAppBarActions(
     onSortClicked: (Priority) -> Unit,
     onDeleteAllConfirmed: () -> Unit
 ) {
+    var openDialog by remember { mutableStateOf(false) }
+
+    DisplayAlertDialog(
+        title = stringResource(id = R.string.delete_all_tasks),
+        message = stringResource(id = R.string.delete_all_tasks_confirmation),
+        openDialog = openDialog,
+        closeDialog = { openDialog = false },
+        onYesClicked = { onDeleteAllConfirmed() }
+    )
+
     SearchAction(onSearchClicked = onSearchClicked)
     SortAction(onSortClicked = onSortClicked)
-    DeleteAllAction(onDeleteAllConfirmed = onDeleteAllConfirmed)
+    DeleteAllAction(onDeleteAllConfirmed = { openDialog = true })
 }
 
 @Composable
@@ -216,12 +227,8 @@ fun SearchAppBar(
                 disabledIndicatorColor = Color.Transparent,
                 unfocusedIndicatorColor = Color.Transparent,
             ),
-            keyboardOptions = KeyboardOptions(
-                imeAction = ImeAction.Search
-            ),
-            keyboardActions = KeyboardActions(
-                onSearch = { onSearchClicked(text) }
-            ),
+            keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+            keyboardActions = KeyboardActions(onSearch = { onSearchClicked(text) }),
             leadingIcon = {
                 IconButton(
                     onClick = {},

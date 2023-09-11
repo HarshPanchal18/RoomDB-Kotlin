@@ -80,6 +80,9 @@ dependencies {
     // Lifecycle components
     implementation(libs.lifecycle.runtime)
 
+    // DataStore Preferences
+    implementation(libs.androidx.datastore.preferences)
+
     // Dagger-hilt components
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
