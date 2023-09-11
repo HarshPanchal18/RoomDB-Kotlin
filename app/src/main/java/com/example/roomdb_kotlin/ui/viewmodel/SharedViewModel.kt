@@ -15,6 +15,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -91,7 +92,7 @@ class SharedViewModel @Inject constructor(
     }
 
     private val _searchedTask = MutableStateFlow<RequestState<List<ToDoTask>>>(RequestState.Idle)
-    val searchedTask = _searchedTask
+    val searchedTask: StateFlow<RequestState<List<ToDoTask>>> = _searchedTask
 
     fun searchDatabase(searchQuery: String) {
         _searchedTask.value = RequestState.Loading
@@ -175,9 +176,18 @@ class SharedViewModel @Inject constructor(
         _sortState.value = RequestState.Loading
         try {
             viewModelScope.launch {
+                dataStoreRepository.readSortState
+                    .map { Priority.valueOf(value = it) }
+                    .collect { _sortState.value = RequestState.Success(it) }
             }
         } catch (e: Exception) {
             _sortState.value = RequestState.Failure(e)
+        }
+    }
+
+    fun persistSortState(priority: Priority) {
+        viewModelScope.launch(Dispatchers.IO) {
+            dataStoreRepository.persistSortState(priority = priority)
         }
     }
 }

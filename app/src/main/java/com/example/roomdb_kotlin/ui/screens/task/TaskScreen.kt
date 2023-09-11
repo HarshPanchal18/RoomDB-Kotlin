@@ -26,10 +26,12 @@ fun TaskScreen(
 
     Scaffold(topBar = {
         TaskAppBar(selectedTask = selectedTask, navigateToListScreen = { action ->
-            if(action == Action.NOT_ACTION)
+            if (action == Action.NOT_ACTION)
                 navigateToListScreen(action)
-            else if(sharedViewModel.validateFields()) navigateToListScreen(action)
-            else displayToast(context = context)
+            else if (sharedViewModel.validateFields())
+                navigateToListScreen(action)
+            else
+                displayToast(context = context)
 
         })
     }) {
@@ -46,9 +48,5 @@ fun TaskScreen(
 }
 
 fun displayToast(context: Context) {
-    Toast.makeText(
-        context,
-        "Fields are empty.",
-        Toast.LENGTH_SHORT
-    ).show()
+    Toast.makeText(context, "Fields are empty.", Toast.LENGTH_SHORT).show()
 }
