@@ -31,6 +31,7 @@ fun ListScreen(
 
     LaunchedEffect(key1 = true) {
         sharedViewModel.getAllTasks()
+        sharedViewModel.readSortState()
     }
 
     val allTasks by sharedViewModel.allTasks.collectAsState()
@@ -71,6 +72,10 @@ fun ListScreen(
             sortState = sortState,
             lowPriorityTasks = lowPriorityTasks,
             highPriorityTasks = highPriorityTasks,
+            onSwipeToDelete = { action, task ->
+                sharedViewModel.action.value = action
+                sharedViewModel.updateTaskFields(selectedTask = task)
+            },
             navigateToTaskScreen = navigateToTaskScreen
         )
     }
