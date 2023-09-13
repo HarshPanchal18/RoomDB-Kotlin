@@ -6,11 +6,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.roomdb_kotlin"
+    namespace = "com.example.roomdb"
     compileSdk = 33
 
     defaultConfig {
-        applicationId = "com.example.roomdb_kotlin"
+        applicationId = "com.example.roomdb"
         minSdk = 28
         targetSdk = 33
         versionCode = 1
