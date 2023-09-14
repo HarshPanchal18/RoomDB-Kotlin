@@ -1,16 +1,17 @@
 plugins {
     id("com.android.application")
     id("org.jetbrains.kotlin.android")
+    id("dagger.hilt.android.plugin")
     id("com.google.dagger.hilt.android")
     id("com.google.devtools.ksp")
 }
 
 android {
-    namespace = "com.example.roomdb"
+    namespace = "com.example.roomdb_kotlin"
     compileSdk = 33
 
     defaultConfig {
-        applicationId = "com.example.roomdb"
+        applicationId = "com.example.roomdb_kotlin"
         minSdk = 28
         targetSdk = 33
         versionCode = 1
@@ -86,4 +87,5 @@ dependencies {
     // Dagger-hilt components
     implementation(libs.hilt.android)
     ksp(libs.hilt.android.compiler)
+    ksp(libs.androidx.hilt.compiler)
 }
