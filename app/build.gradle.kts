@@ -3,7 +3,8 @@ plugins {
     id("org.jetbrains.kotlin.android")
     id("dagger.hilt.android.plugin")
     id("com.google.dagger.hilt.android")
-    id("com.google.devtools.ksp")
+    id("kotlin-kapt")
+    //id("com.google.devtools.ksp")
 }
 
 android {
@@ -76,7 +77,7 @@ dependencies {
 
     // Room components
     implementation(libs.bundles.room)
-    ksp(libs.room.compiler)
+    kapt(libs.room.compiler)
 
     // Lifecycle components
     implementation(libs.lifecycle.runtime)
@@ -86,6 +87,6 @@ dependencies {
 
     // Dagger-hilt components
     implementation(libs.hilt.android)
-    ksp(libs.hilt.android.compiler)
-    ksp(libs.androidx.hilt.compiler)
+    kapt(libs.hilt.android.compiler)
+    kapt(libs.androidx.hilt.compiler)
 }

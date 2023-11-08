@@ -11,6 +11,7 @@ import com.example.roomdb_kotlin.data.repositories.ToDoRepository
 import com.example.roomdb_kotlin.util.Action
 import com.example.roomdb_kotlin.util.RequestState
 import com.example.roomdb_kotlin.util.SearchAppBarState
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -20,6 +21,7 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
+@HiltViewModel
 class SharedViewModel @Inject constructor(
     private val repository: ToDoRepository,
     private val dataStoreRepository: DataStoreRepository
